@@ -1,14 +1,65 @@
-/* css style sheet */
-
-/* ID - for only one tag */
-#label {
-    font-style:italic; color:blue
-}
-
-#button { 
-    color:red
-}
-
-* {
-    background-color: blueviolet;
-}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+  }
+  
+  h1 {
+    font-size: 32px;
+    font-weight: normal;
+    margin-bottom: 24px;
+  }
+  
+  h2 {
+    font-size: 24px;
+    font-weight: normal;
+    margin-top: 32px;
+    margin-bottom: 16px;
+  }
+  
+  form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+  }
+  
+  label {
+    display: block;
+    font-weight: normal;
+    margin-bottom: 8px;
+  }
+  
+  input[type="text"],
+  input[type="number"],
+  input[type="color"] {
+    display: block;
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  input[type="submit"] {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-top: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: normal;
+    cursor: pointer;
+  }
+  
+  input[type="submit"]:hover {
+    background-color: #0062cc;
+  }
+  
+  #error {
+    color: #ff0000;
+    margin-top: 8px;
+  }
