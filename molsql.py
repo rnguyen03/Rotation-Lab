@@ -63,6 +63,13 @@ class Database:
         self.conn.execute(command, values)
         # Commit change
         self.conn.commit()
+    
+    # Remove element from table
+    def remove_element(self, element_code):    
+        c = self.conn.cursor()
+        c.execute("DELETE FROM Elements WHERE element_code=?", (element_code,))
+        self.conn.commit()
+        self.conn.close
         
      # Add atom
     def add_atom(self, molname, atom):
@@ -200,6 +207,46 @@ class Database:
         # return string representation of svg
         return svg
     
+    def getMolecules(self):
+        # Open Connection
+        conn = sqlite3.connect('molecules.db')
+        cursor = conn.cursor()
+
+        # Select Molecule IDs, Names, Bond Counts, and Atom Counts
+        query1 = """SELECT Molecules.MOLECULE_ID, Molecules.NAME, COUNT(DISTINCT Bonds.BOND_ID), COUNT(DISTINCT Atoms.ATOM_ID)
+                    FROM Molecules
+                    JOIN MoleculeBond ON Molecules.MOLECULE_ID = MoleculeBond.MOLECULE_ID
+                    JOIN Bonds ON MoleculeBond.BOND_ID = Bonds.BOND_ID
+                    JOIN MoleculeAtom ON Molecules.MOLECULE_ID = MoleculeAtom.MOLECULE_ID
+                    JOIN Atoms ON MoleculeAtom.ATOM_ID = Atoms.ATOM_ID
+                    GROUP BY Molecules.MOLECULE_ID"""
+        cursor.execute(query1)
+        molecule_results = cursor.fetchall()
+
+        molecule_info = []
+
+        # Loop Through Molecules
+        for molecule_result in molecule_results:
+            name = molecule_result[1]
+            bond_count = molecule_result[2]
+            atom_count = molecule_result[3]
+
+            # Create Molecule Dictionary
+            molecule = {
+                "name": name,
+                "bond_count": bond_count,
+                "atom_count": atom_count
+            }
+
+            # Append Molecule to List
+            molecule_info.append(molecule)
+
+        # Close Connection
+        cursor.close()
+        conn.close()
+
+        return molecule_info
+        
             
 if __name__ == "__main__":
     db = Database(reset=False); # or use default

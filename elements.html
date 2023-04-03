@@ -3,26 +3,31 @@
 <head>
     <title> Add/Remove Elements </title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"> </script>
-    <script src="script.js" />
-    </script>
+    <script src="elements.js" \></script>
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
-    <h1> Add/Remove Elements </h1>
-    <form action="molecule" enctype="multipart/form-data" method="post">
+    <div class="nav-bar">
+        <a href="home.html">Home</a>
+        <a href="elements.html">Elements</a>
+        <a href="upload-sdf.html">Upload SDF</a>
+        <a href="molecules.html">Molecules</a>
+    </div>
+    <h1> Elements </h1>
+    <form action="elements" id="elements" enctype="multipart/form-data" method="post">
         <h2> Add Element </h2>
         <p>
             <label for="element_number">Element Number:</label>
-            <input type="text" id="element_number" name="element_number" placeholder="E.g. 7" />
+            <input type="text" id="element_number" name="element_number" placeholder="E.g. 8" required />
         </p>
         <p>
             <label for="element_code">Element Code:</label>
-            <input type="text" id="element_code" name="element_code" placeholder="E.g. O"/>
+            <input type="text" id="element_code" name="element_code" placeholder="E.g. O" required />
         </p>
         <p>
             <label for="element_name">Element Name:</label>
-            <input type="text" id="element_name" name="element_name" placeholder="E.g. Oxygen"/>
+            <input type="text" id="element_name" name="element_name" placeholder="E.g. Oxygen" required />
         </p>
         <p>
             <label for="color1">Color 1:</label>
@@ -38,22 +43,28 @@
         </p>
         <p>
             <label for="radius">Radius:</label>
-            <input type="number" id="radius" name="radius" value="1" min="0"/>
+            <input type="number" id="radius" name="radius" value="1" min="1" />
         </p>
         <p>
-            <input type="submit" name="add_element" value="Add Element" />
+            <label for="add_element">Add Element:</label>
+            <input type="submit" id="add_element" name="add_element" value="Add Element" />
         </p>
 
         <h2> Remove Element </h2>
         <p>
-            <label for="remove_element">Element Code:</label>
-            <input type="text" id="remove_element" name="remove_element" />
+            <label for="remove_element_name">Element Name:</label>
+            <input type="text" id="remove_element_name" name="remove_element_name" placeholder="E.g. Oxygen" />
         </p>
         <p>
-            <input type="submit" name="remove_element_submit" value="Remove Element" />
+            <label for="remove_element">Remove Element:</label>
+            <input type="submit" id="remove_element" name="remove_element" value="Remove Element" />
         </p>
+        <input type="hidden" name="hidden_button" id="hidden_button">
     </form>
 </body>
+<footer>
+    <p>&copy; 2023 Molecule Viewer</p>
+</footer>
 
 </html>
 
