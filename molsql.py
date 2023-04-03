@@ -196,10 +196,10 @@ class Database:
 
         # create a list comprehension to build the SVG string
         svg = "\n".join([
-            f'<radialGradient id="{e[0]}" cx="-50%%" cy="-50%%" r="220%%" fx="20%%" fy="20%%">'
-            f'<stop offset="0%%" stop-color="#{e[1]}"/>'
-            f'<stop offset="50%%" stop-color="#{e[2]}"/>'
-            f'<stop offset="100%%" stop-color="#{e[3]}"/>'
+            f'<radialGradient id="{e[0]}" cx="-50%" cy="-50%" r="220%" fx="20%" fy="20%">'
+            f'<stop offset="0%" stop-color="#{e[1]}"/>'
+            f'<stop offset="50%" stop-color="#{e[2]}"/>'
+            f'<stop offset="100%" stop-color="#{e[3]}"/>'
             f'</radialGradient>'
             for e in elements
         ])
@@ -246,6 +246,18 @@ class Database:
         conn.close()
 
         return molecule_info
+    
+    def molecule_exists(self, name):
+        # Query the Molecules table for the given name
+        cursor = self.conn.cursor()
+        query = "SELECT * FROM Molecules WHERE NAME = ?"
+        cursor.execute(query, (name,))
+        # Check if a row was returned
+        row = cursor.fetchone()
+        if row is None:
+            return False
+        else:
+            return True
         
             
 if __name__ == "__main__":

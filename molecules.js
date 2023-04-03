@@ -32,6 +32,12 @@ $(document).ready(function () {
                     moleculeInfo.append($('<span class="molecule-bonds"></span>').text('Bonds: ' + molecule.bond_count));
                     moleculeBar.append(moleculeInfo);
 
+                    // add a click event to the moleculeBar element that calls the processMolecule function with the molecule name
+                    moleculeBar.on('click', function () {
+                        var moleculeName = $(this).find('.molecule-name').text();
+                        processMolecule(moleculeName);
+                    });
+
                     // add the moleculeBar element to the page
                     moleculeList.append(moleculeBar);
                 }
@@ -42,4 +48,19 @@ $(document).ready(function () {
             console.log(errorThrown);
         }
     });
+    function processMolecule(moleculeName) {
+        $.ajax({
+          url: '/view-molecule', // the URL to your Flask route that processes the molecule
+          type: 'POST',
+          data: {'moleculeName': moleculeName},
+          success: function (response) {
+            console.log(response);
+            window.location.href = '/viewer.html'; // redirect to viewer.html
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            console.log(xhr.status);
+            console.log(errorThrown);
+          }
+        });
+    }
 });

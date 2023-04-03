@@ -16,15 +16,17 @@
         <a href="molecules.html">Molecules</a>
     </div>
     <h1> Upload Sdf Files </h1>
-    <form action="upload-sdf.html" method="post" enctype="multipart/form-data">
-        <label for="mol-name">Name Molecule:</label>
-        <input type="text" name="mol-name" id="mol-name">
-        <br>
-        <label for="sdf-file">Upload SDF file:</label>
-        <input type="file" name="sdf-file" id="sdf-file">
-        <br>
-        <input type="submit" id="submit_sdf" name="submit_sdf" value="Submit SDF" />
-    </form>
+    <div class="wrapper">
+        <form action="upload-sdf.html" method="post" enctype="multipart/form-data">
+            <label for="mol-name">Name Molecule:</label>
+            <input type="text" name="mol-name" id="mol-name">
+            <br>
+            <label for="sdf-file">Upload SDF file:</label>
+            <input type="file" name="sdf-file" id="sdf-file">
+            <br>
+            <input type="submit" id="submit_sdf" name="submit_sdf" value="Submit SDF" />
+        </form>
+    </div>
 </body>
 <footer>
     <p>&copy; 2023 Molecule Viewer</p>

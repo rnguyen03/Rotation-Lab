@@ -6,16 +6,19 @@ import urllib
 import cgi
 import email
 from rdkit import Chem
-from MolDisplay import Molecule
-from MolDisplay import Atom
+import MolDisplay
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 public_files = ['/elements.html', '/upload-sdf.html', '/molecules.html',
-                '/home.html', '/style.css', '/elements.js',
-                '/uploadsdf.js', '/molecules.js']
+                '/home.html', '/viewer.html','/style.css', '/elements.js',
+                '/uploadsdf.js', '/molecules.js', '/viewer.js']
+db = molsql.Database(reset=True)
+db.create_tables()
 
 
 class MyHandler(BaseHTTPRequestHandler):
+    # Class variable declaration
+    present_molecule = "Empty"
     # Get Homepage
     def do_GET(self):
         # Check user is at home page
@@ -55,6 +58,24 @@ class MyHandler(BaseHTTPRequestHandler):
             print(f"SENT: {molecules_json}")
 
             self.wfile.write(bytes(molecules_json, "utf-8"))
+        elif (self.path == '/svg'):
+            self.send_response( 200 ) # OK
+            self.send_header("Content-type", "image/svg+xml") #Declare content type (image display)
+            self.end_headers() #End declaration
+
+            length = int(self.headers.get('Content-Length', 0)) #Declare length of page
+        
+            # Get molecule and setup SVG
+            MolDisplay.radius = db.radius()
+            MolDisplay.element_name = db.element_name()
+            MolDisplay.header += db.radial_gradients()
+            mol = db.load_mol(MyHandler.present_molecule)
+            mol.sort()
+            
+            print(mol.svg())
+
+            self.wfile.write( bytes( mol.svg(), "utf-8" ) ) #Create Page
+
         else:
             self.send_response(404)  # Notify 404 error
             self.end_headers()  # End declaration
@@ -63,31 +84,7 @@ class MyHandler(BaseHTTPRequestHandler):
     # get Molecule Page
     def do_POST(self):
         # Check user is at molecule page
-        if (self.path == "/molecule"):
-            self.send_response(200)  # OK
-            # Declare content type (image display)
-            self.send_header("Content-type", "image/svg+xml")
-            self.end_headers()  # End declaration
-
-            # Declare length of page
-            length = int(self.headers.get('Content-Length', 0))
-
-            # Convert and get file object
-            data = self.rfile.read(length)
-            tFile = io.BytesIO(data)
-            file = io.TextIOWrapper(tFile)
-
-            # Skip the first 4 lines
-            for i in range(4):
-                file.readline()
-
-            # Create Molecule
-            mol = Molecule()
-            mol.parse(file)
-            mol.sort()
-
-            self.wfile.write(bytes(mol.svg(), "utf-8"))  # Create Page
-        elif (self.path == "/elements.html"):
+        if (self.path == "/elements.html"):
             content_length = int(self.headers['Content-Length'])
             body = self.rfile.read(content_length)
             postvars = urllib.parse.parse_qs(body.decode('utf-8'))
@@ -96,12 +93,12 @@ class MyHandler(BaseHTTPRequestHandler):
             operation = postvars['operation'][0]
             if (operation == "add"):
                 # Parse for data
-                element_code = postvars['eCode'][0]
+                element_code = str(postvars['eCode'][0])
                 element_num = postvars['eNumber'][0]
-                element_name = postvars['eName'][0]
-                col1 = postvars['col1'][0]
-                col2 = postvars['col2'][0]
-                col3 = postvars['col3'][0]
+                element_name = str(postvars['eName'][0])
+                col1 = str(postvars['col1'][0]).lstrip('#')
+                col2 = str(postvars['col2'][0]).lstrip('#')
+                col3 = str(postvars['col3'][0]).lstrip('#')
                 radius = postvars['rad'][0]
 
                 # Store Data
@@ -150,6 +147,17 @@ class MyHandler(BaseHTTPRequestHandler):
                 self.wfile.write(response_body.encode('utf-8'))
                 return
 
+            if not db.molecule_exists:
+                # Handle invalid molecule name error
+                response_body = "Invalid Molecule Name"
+                response_length = len(response_body.encode('utf-8'))
+                self.send_response(406)
+                self.send_header("Content-type", "text/plain")
+                self.send_header("Content-length", response_length)
+                self.end_headers()
+                self.wfile.write(response_body.encode('utf-8'))
+                return
+
             # Create Molecule
             tFile = io.BytesIO(sdf_file)
             file = io.TextIOWrapper(tFile)
@@ -167,13 +175,30 @@ class MyHandler(BaseHTTPRequestHandler):
             self.send_header("Content-length", response_length)
             self.end_headers()
             self.wfile.write(response_body.encode('utf-8'))
-        elif (self.path == '/molecules.html'):
+        elif (self.path == "/view-molecule"):
             content_length = int(self.headers['Content-Length'])
             body = self.rfile.read(content_length)
             postvars = urllib.parse.parse_qs(body.decode('utf-8'))
-
-            # Send response to client
-            response_body = "STORED"
+        
+            # Recieve name of molecule
+            molecule_name = postvars['moleculeName'][0]
+            
+            if not db.molecule_exists:
+                # Handle invalid molecule name error
+                response_body = "Invalid Molecule Name"
+                response_length = len(response_body.encode('utf-8'))
+                self.send_response(400)
+                self.send_header("Content-type", "text/plain")
+                self.send_header("Content-length", response_length)
+                self.end_headers()
+                self.wfile.write(response_body.encode('utf-8'))
+                return
+                
+            # Store Name
+            MyHandler.present_molecule = molecule_name
+            
+            # Send success response
+            response_body = "Molecule name stored successfully"
             response_length = len(response_body.encode('utf-8'))
             self.send_response(200)
             self.send_header("Content-type", "text/plain")
@@ -188,8 +213,6 @@ class MyHandler(BaseHTTPRequestHandler):
 
 # Server Start
 httpd = HTTPServer(('localhost', int(sys.argv[1])), MyHandler)
-db = molsql.Database(reset=True)
-db.create_tables()
 httpd.serve_forever()
 
 
