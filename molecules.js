@@ -5,16 +5,18 @@ $(document).ready(function () {
         type: 'GET',
         dataType: 'json', 
         success: function (data, status, xhr) {
+            var moleculeList = $('#molecule-list'); // get the molecule-list container
+            moleculeList.empty(); // Empty current elements
             if (xhr.status === 204) {
                 console.log("Database Empty")
-                var moleculeList = $('#molecule-list');
-                var emptyBar = $('<div class="empty-bar"></div>').text("No Molecules. Upload an SDF");
+                var emptyBar = $('<div class="empty-bar"></div>').css('white-space', 'pre-line').text("Click here to navigate to Upload SDF!\nRemember to add corresponding Elements too!");
+                emptyBar.on('click', function() {
+                    window.location.href = 'upload-sdf.html';
+                });
                 moleculeList.append(emptyBar);
             }
             else {
                 var molecules = data; // convert the response to a JavaScript object
-                var moleculeList = $('#molecule-list'); // get the molecule-list container
-                moleculeList.empty();
                 console.log("SUCEEDED");
                 // loop through the molecules and add them to the moleculeList container
                 for (var i = 0; i < molecules.length; i++) {

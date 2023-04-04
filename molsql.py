@@ -187,23 +187,25 @@ class Database:
         # Return query as dictionary
         return {row[0]: row[1] for row in self.conn.execute("SELECT ELEMENT_CODE, ELEMENT_NAME FROM ELEMENTS").fetchall()}
 
-    # Method to create svg's
-    def radial_gradients(self):
+    def radial_gradients( self ):
+        # declare and initialize variable
+        svg = ""
+
         # Get values from Elements Table
         cursor = self.conn.cursor()
         cursor.execute("SELECT ELEMENT_NAME, COLOUR1, COLOUR2, COLOUR3 FROM Elements")
         elements = cursor.fetchall()
 
-        # create a list comprehension to build the SVG string
-        svg = "\n".join([
-            f'<radialGradient id="{e[0]}" cx="-50%" cy="-50%" r="220%" fx="20%" fy="20%">'
-            f'<stop offset="0%" stop-color="#{e[1]}"/>'
-            f'<stop offset="50%" stop-color="#{e[2]}"/>'
-            f'<stop offset="100%" stop-color="#{e[3]}"/>'
-            f'</radialGradient>'
-            for e in elements
-        ])
-
+        # loop through elements
+        for element in elements:
+            # concatenate string with values
+            svg = svg + """
+<radialGradient id="%s" cx="-50%%" cy="-50%%" r="220%%" fx="20%%" fy="20%%">
+  <stop offset="0%%" stop-color="#%s"/>
+  <stop offset="50%%" stop-color="#%s"/>
+  <stop offset="100%%" stop-color="#%s"/>
+</radialGradient>""" % (element[0], element[1], element[2], element[3])
+        
         # return string representation of svg
         return svg
     

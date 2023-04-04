@@ -37,7 +37,14 @@ body {
 }
 
 .wrapper {
-  min-height: 90vh;
+  min-height: 95vh;
+}
+
+.display-wrapper {
+  min-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1 {
@@ -57,6 +64,7 @@ h2 {
 form {
   max-width: 600px;
   margin: 0 auto;
+  margin-bottom: 2%;
   padding: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -115,23 +123,76 @@ input[type="submit"]:hover {
   background-color: #0062cc;
 }
 
+#display-box {
+  display:flow-root;
+  transform: translateY(30px);
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 5px;
+  width: 500px;
+  height: 400px;
+  margin: 0 auto;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  margin-bottom: 5%;
+}
+
+#control-panel {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+#control-panel button {
+  margin: 0 10px;
+}
+
+.button-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 /* Style for molecule bars */
 #molecule-list {
   display:flow-root;
   justify-content: center;
   align-items: center;
-  background-color: #e6e6e6;
+  background-color: #ffffff;
   padding-top: 2px;
   padding-bottom: 2px;
   border-radius: 5px;
   max-width: 500px;
-  min-height: 200px;
+  min-height: 400px;
   margin: 0 auto;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.molecule-bar,
 .empty-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #dbdbdb;
+  color:#323232;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 500px;
+  text-align: center;
+  flex-grow: 1;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  margin-bottom: 1px;
+  align-self: flex-start;
+}
+
+.empty-bar:hover {
+  background-color: #737373;
+  cursor: pointer;
+}
+
+.molecule-bar{
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -148,8 +209,7 @@ input[type="submit"]:hover {
   align-self: flex-start;
 }
 
-.molecule-bar:hover,
-.empty-bar:hover {
+.molecule-bar:hover {
   background-color: #5f4f40;
   cursor: pointer;
 }

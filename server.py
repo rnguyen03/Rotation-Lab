@@ -46,12 +46,12 @@ class MyHandler(BaseHTTPRequestHandler):
             molecules = db.getMolecules()
             if len(molecules) == 0:
                 # database empty
-                self.send_response(204)
+                self.send_response(204) # No Content
                 self.send_header("Content-type", "application/json")
                 self.end_headers()
                 return
             
-            self.send_response(200)
+            self.send_response(200) # OK
             self.send_header("Content-type", "application/json")
             self.end_headers()
             molecules_json = json.dumps(molecules)
@@ -59,12 +59,19 @@ class MyHandler(BaseHTTPRequestHandler):
 
             self.wfile.write(bytes(molecules_json, "utf-8"))
         elif (self.path == '/svg'):
+            print(MyHandler.present_molecule)
+            if (MyHandler.present_molecule == "Empty"):
+                # database empty
+                self.send_response(204) # No Content
+                self.send_header("Content-type", "image/svg+xml")
+                self.end_headers()
+                return
+        
             self.send_response( 200 ) # OK
             self.send_header("Content-type", "image/svg+xml") #Declare content type (image display)
             self.end_headers() #End declaration
 
             length = int(self.headers.get('Content-Length', 0)) #Declare length of page
-        
             # Get molecule and setup SVG
             MolDisplay.radius = db.radius()
             MolDisplay.element_name = db.element_name()

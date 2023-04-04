@@ -258,6 +258,9 @@ class molecule(_object):
 
     def sort(self):
         return _molecule.molecule_sort(self)
+
+    def xform(self, xform_matrix):
+        return _molecule.molecule_xform(self, xform_matrix)
 molecule_swigregister = _molecule.molecule_swigregister
 molecule_swigregister(molecule)
 

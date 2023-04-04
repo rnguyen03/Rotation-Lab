@@ -3482,6 +3482,9 @@ SWIGINTERN bond *molecule_get_bond(struct molecule *self,unsigned short i){
 SWIGINTERN void molecule_sort(struct molecule *self){
     molsort( self );
   }
+SWIGINTERN void molecule_xform(struct molecule *self,xform_matrix xform_matrix){
+    mol_xform( self, xform_matrix );
+  }
 
 SWIGINTERNINLINE PyObject*
   SWIG_From_int  (int value)
@@ -5155,6 +5158,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_molecule_xform(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  struct molecule *arg1 = (struct molecule *) 0 ;
+  double (*arg2)[3] ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:molecule_xform",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_molecule, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "molecule_xform" "', argument " "1"" of type '" "struct molecule *""'"); 
+  }
+  arg1 = (struct molecule *)(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_a_3__double, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "molecule_xform" "', argument " "2"" of type '" "double [3][3]""'"); 
+  } 
+  arg2 = (double (*)[3])(argp2);
+  molecule_xform(arg1,(double (*)[3])arg2);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *molecule_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args,(char *)"O:swigregister", &obj)) return NULL;
@@ -6012,6 +6045,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "molecule_get_atom", _wrap_molecule_get_atom, METH_VARARGS, NULL},
 	 { "molecule_get_bond", _wrap_molecule_get_bond, METH_VARARGS, NULL},
 	 { "molecule_sort", _wrap_molecule_sort, METH_VARARGS, NULL},
+	 { "molecule_xform", _wrap_molecule_xform, METH_VARARGS, NULL},
 	 { "molecule_swigregister", molecule_swigregister, METH_VARARGS, NULL},
 	 { "atomset", _wrap_atomset, METH_VARARGS, NULL},
 	 { "atomget", _wrap_atomget, METH_VARARGS, NULL},
