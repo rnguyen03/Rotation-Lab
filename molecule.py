@@ -144,14 +144,14 @@ class bond(_object):
     __swig_getmethods__["a2"] = _molecule.bond_a2_get
     if _newclass:
         a2 = _swig_property(_molecule.bond_a2_get, _molecule.bond_a2_set)
-    __swig_setmethods__["epairs"] = _molecule.bond_epairs_set
-    __swig_getmethods__["epairs"] = _molecule.bond_epairs_get
-    if _newclass:
-        epairs = _swig_property(_molecule.bond_epairs_get, _molecule.bond_epairs_set)
     __swig_setmethods__["atoms"] = _molecule.bond_atoms_set
     __swig_getmethods__["atoms"] = _molecule.bond_atoms_get
     if _newclass:
         atoms = _swig_property(_molecule.bond_atoms_get, _molecule.bond_atoms_set)
+    __swig_setmethods__["epairs"] = _molecule.bond_epairs_set
+    __swig_getmethods__["epairs"] = _molecule.bond_epairs_get
+    if _newclass:
+        epairs = _swig_property(_molecule.bond_epairs_get, _molecule.bond_epairs_set)
     __swig_setmethods__["x1"] = _molecule.bond_x1_set
     __swig_getmethods__["x1"] = _molecule.bond_x1_get
     if _newclass:
@@ -264,6 +264,28 @@ class molecule(_object):
 molecule_swigregister = _molecule.molecule_swigregister
 molecule_swigregister(molecule)
 
+class mx_wrapper(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, mx_wrapper, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, mx_wrapper, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["xform_matrix"] = _molecule.mx_wrapper_xform_matrix_set
+    __swig_getmethods__["xform_matrix"] = _molecule.mx_wrapper_xform_matrix_get
+    if _newclass:
+        xform_matrix = _swig_property(_molecule.mx_wrapper_xform_matrix_get, _molecule.mx_wrapper_xform_matrix_set)
+
+    def __init__(self, xrot, yrot, zrot):
+        this = _molecule.new_mx_wrapper(xrot, yrot, zrot)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _molecule.delete_mx_wrapper
+    __del__ = lambda self: None
+mx_wrapper_swigregister = _molecule.mx_wrapper_swigregister
+mx_wrapper_swigregister(mx_wrapper)
+
 
 def atomset(atom, element, x, y, z):
     return _molecule.atomset(atom, element, x, y, z)
@@ -280,6 +302,10 @@ bondset = _molecule.bondset
 def bondget(bond, a1, a2, atoms, epairs):
     return _molecule.bondget(bond, a1, a2, atoms, epairs)
 bondget = _molecule.bondget
+
+def compute_coords(bond):
+    return _molecule.compute_coords(bond)
+compute_coords = _molecule.compute_coords
 
 def molmalloc(atom_max, bond_max):
     return _molecule.molmalloc(atom_max, bond_max)
@@ -317,17 +343,39 @@ def zrotation(xform_matrix, deg):
     return _molecule.zrotation(xform_matrix, deg)
 zrotation = _molecule.zrotation
 
-def compute_coords(bond):
-    return _molecule.compute_coords(bond)
-compute_coords = _molecule.compute_coords
-
-def bond_comp(a, b):
-    return _molecule.bond_comp(a, b)
-bond_comp = _molecule.bond_comp
-
 def mol_xform(molecule, matrix):
     return _molecule.mol_xform(molecule, matrix)
 mol_xform = _molecule.mol_xform
+class rotations(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, rotations, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, rotations, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["x"] = _molecule.rotations_x_set
+    __swig_getmethods__["x"] = _molecule.rotations_x_get
+    if _newclass:
+        x = _swig_property(_molecule.rotations_x_get, _molecule.rotations_x_set)
+    __swig_setmethods__["y"] = _molecule.rotations_y_set
+    __swig_getmethods__["y"] = _molecule.rotations_y_get
+    if _newclass:
+        y = _swig_property(_molecule.rotations_y_get, _molecule.rotations_y_set)
+    __swig_setmethods__["z"] = _molecule.rotations_z_set
+    __swig_getmethods__["z"] = _molecule.rotations_z_get
+    if _newclass:
+        z = _swig_property(_molecule.rotations_z_get, _molecule.rotations_z_set)
+
+    def __init__(self):
+        this = _molecule.new_rotations()
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+    __swig_destroy__ = _molecule.delete_rotations
+    __del__ = lambda self: None
+rotations_swigregister = _molecule.rotations_swigregister
+rotations_swigregister(rotations)
+
 
 def aQuicksort(arr, low, high):
     return _molecule.aQuicksort(arr, low, high)

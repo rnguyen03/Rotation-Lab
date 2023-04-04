@@ -5,6 +5,7 @@ import molsql
 import urllib
 import cgi
 import email
+import molecule
 from rdkit import Chem
 import MolDisplay
 from http.server import HTTPServer, BaseHTTPRequestHandler
@@ -19,6 +20,9 @@ db.create_tables()
 class MyHandler(BaseHTTPRequestHandler):
     # Class variable declaration
     present_molecule = "Empty"
+    angleX = 0
+    angleY = 0
+    angleZ = 0
     # Get Homepage
     def do_GET(self):
         # Check user is at home page
@@ -55,7 +59,6 @@ class MyHandler(BaseHTTPRequestHandler):
             self.send_header("Content-type", "application/json")
             self.end_headers()
             molecules_json = json.dumps(molecules)
-            print(f"SENT: {molecules_json}")
 
             self.wfile.write(bytes(molecules_json, "utf-8"))
         elif (self.path == '/svg'):
@@ -77,9 +80,21 @@ class MyHandler(BaseHTTPRequestHandler):
             MolDisplay.element_name = db.element_name()
             MolDisplay.header += db.radial_gradients()
             mol = db.load_mol(MyHandler.present_molecule)
-            mol.sort()
             
-            print(mol.svg())
+            print(MyHandler.angleX)
+            print(MyHandler.angleY)
+            print(MyHandler.angleZ)
+            
+            if (MyHandler.angleX != 0):
+                mx = molecule.mx_wrapper(int(MyHandler.angleX), 0, 0)
+                mol.xform( mx.xform_matrix )
+            if (MyHandler.angleY != 0):
+                mx = molecule.mx_wrapper(0, int(MyHandler.angleY), 0)
+                mol.xform( mx.xform_matrix )
+            if (MyHandler.angleZ != 0):
+                mx = molecule.mx_wrapper(0, 0, int(MyHandler.angleZ))
+                mol.xform( mx.xform_matrix )
+            mol.sort()
 
             self.wfile.write( bytes( mol.svg(), "utf-8" ) ) #Create Page
 
@@ -154,11 +169,11 @@ class MyHandler(BaseHTTPRequestHandler):
                 self.wfile.write(response_body.encode('utf-8'))
                 return
 
-            if not db.molecule_exists:
+            if db.molecule_exists(mol_name):
                 # Handle invalid molecule name error
                 response_body = "Invalid Molecule Name"
                 response_length = len(response_body.encode('utf-8'))
-                self.send_response(406)
+                self.send_response(406) # Not Acceptable
                 self.send_header("Content-type", "text/plain")
                 self.send_header("Content-length", response_length)
                 self.end_headers()
@@ -212,6 +227,30 @@ class MyHandler(BaseHTTPRequestHandler):
             self.send_header("Content-length", response_length)
             self.end_headers()
             self.wfile.write(response_body.encode('utf-8'))
+        elif (self.path == "/angle"):
+            content_length = int(self.headers['Content-Length'])
+            body = self.rfile.read(content_length)
+            postvars = urllib.parse.parse_qs(body.decode('utf-8'))
+            
+            rotation_axis = postvars['axis'][0]
+            if (rotation_axis == "x"):
+                MyHandler.angleX = (MyHandler.angleX + 10) % 360
+            elif (rotation_axis == "y"):
+                MyHandler.angleY = (MyHandler.angleY + 10) % 360
+            elif (rotation_axis == "z"):
+                MyHandler.angleZ = (MyHandler.angleZ + 10) % 360
+            
+            
+            # Send success response
+            response_body = "Degree changed incremented successfully"
+            response_length = len(response_body.encode('utf-8'))
+            self.send_response(200)
+            self.send_header("Content-type", "text/plain")
+            self.send_header("Content-length", response_length)
+            self.end_headers()
+            self.wfile.write(response_body.encode('utf-8'))
+                
+            
         else:
             self.send_response(404)
             self.end_headers()
