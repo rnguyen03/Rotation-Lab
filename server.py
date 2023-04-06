@@ -98,19 +98,14 @@ class MyHandler(BaseHTTPRequestHandler):
             mol.sort()
             
             svg = mol.svg()
-            print(int(acount))
             if (int(acount) < 5):
                 svg = svg.replace('<svg ', '<svg id="display-svg" version="1.1" viewBox="0 0 1000 1000" width="500px" height="400px" preserveAspectRatio="xMidYMid meet" ')
-                print("not scaled")
             elif (5 < int(acount) and int(acount) < 15):
                 svg = svg.replace('<svg ', '<svg id="display-svg" version="1.1" viewBox="0 0 1000 1000" width="500px" height="400px" preserveAspectRatio="xMidYMid meet" style="transform: scale(0.9);" ')
-                print("scaled 1")
             elif (15 < int(acount) and int(acount) < 30):
                 svg = svg.replace('<svg ', '<svg id="display-svg" version="1.1" viewBox="0 0 1000 1000" width="500px" height="400px" preserveAspectRatio="xMidYMid meet" style="transform: scale(0.7);" ')
-                print("scaled 2")
             else:
                 svg = svg.replace('<svg ', '<svg id="display-svg" version="1.1" viewBox="0 0 1000 1000" width="500px" height="400px" preserveAspectRatio="xMidYMid meet" style="transform: scale(0.5);" ')
-                print("scaled 3")
 
             self.wfile.write( bytes(svg, "utf-8" ) ) #Create Page
         elif self.path == '/background.jpg':
