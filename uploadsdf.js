@@ -7,7 +7,7 @@ $(document).ready(function() {
     var invalid = $('<p>Submission Error</p>')
     $('#submit_sdf').on('click', function(e) {
         e.preventDefault();
-        submission.empty()
+        submission.empty();
         submission.append(loading);
         var molName = $('#mol-name').val().trim();
         var sdfFile = $('#sdf-file')[0].files[0];
@@ -26,12 +26,12 @@ $(document).ready(function() {
             processData: false,
             contentType: false,
             success: function(response) {
-                submission.empty()
+                submission.empty();
                 submission.append(success)
                 console.log("Element added");
             },
             error: function(xhr, status, error) {
-                submission.empty()
+                submission.empty();
                 if (xhr.status === 400) {
                     submission.append(invalid)
                 } else if (xhr.status === 406){

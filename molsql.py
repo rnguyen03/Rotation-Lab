@@ -65,11 +65,11 @@ class Database:
         self.conn.commit()
     
     # Remove element from table
-    def remove_element(self, element_code):    
+    def remove_element(self, element_name):    
         c = self.conn.cursor()
-        c.execute("DELETE FROM Elements WHERE element_code=?", (element_code,))
+        c.execute("DELETE FROM Elements WHERE ELEMENT_NAME=?", (element_name,))
         self.conn.commit()
-        self.conn.close
+        # self.conn.close
         
      # Add atom
     def add_atom(self, molname, atom):

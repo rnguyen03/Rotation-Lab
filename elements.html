@@ -51,8 +51,11 @@
                 <input type="number" id="radius" name="radius" value="1" min="1" />
             </p>
             <p>
-                <label for="add_element">Add Element:</label>
-                <input type="submit" id="add_element" name="add_element" value="Add Element" />
+                <div id="submit-wrap">
+                    <label for="add_element">Add Element:</label>
+                    <input type="submit" id="add_element" name="add_element" value="Add Element" />
+                    <div id="message"></div>
+                </div>
             </p>
 
             <h2> Remove Element </h2>
@@ -61,8 +64,11 @@
                 <input type="text" id="remove_element_name" name="remove_element_name" placeholder="E.g. Oxygen" />
             </p>
             <p>
-                <label for="remove_element">Remove Element:</label>
-                <input type="submit" id="remove_element" name="remove_element" value="Remove Element" />
+                <div id="submit-wrap">
+                    <label for="remove_element">Remove Element:</label>
+                    <input type="submit" id="remove_element" name="remove_element" value="Remove Element" />
+                    <div id="message2"></div>
+                </div>
             </p>
             <input type="hidden" name="hidden_button" id="hidden_button">
         </form>

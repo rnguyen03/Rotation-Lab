@@ -158,7 +158,7 @@ class MyHandler(BaseHTTPRequestHandler):
                 db['Elements'] = (element_num, element_code,
                                   element_name, col1, col2, col3, radius)
 
-                message = f"{element_name} has been added."
+                message = " has been added."
                 response_length = len(message)
 
                 # Send response to client
@@ -166,16 +166,19 @@ class MyHandler(BaseHTTPRequestHandler):
                 self.send_header("Content-type", "text/plain")
                 self.send_header("Content-length", response_length)
                 self.end_headers()
+                
             elif (operation == "remove"):
                 element_name = postvars['reName'][0]
                 db.remove_element(element_name)
 
                 # Send response to client
-                message = f"{element_name} has been removed."
+                message = " has been removed."
+                response_length = len(message)
                 self.send_response(200)  # OK
                 self.send_header("Content-type", "text/plain")
-                self.send_header("Content-length", content_length)
+                self.send_header("Content-length", response_length)
                 self.end_headers()
+                
         elif (self.path == "/upload-sdf.html"):
             form = cgi.FieldStorage(
                 fp=self.rfile,
