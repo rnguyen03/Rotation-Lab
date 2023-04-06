@@ -26,7 +26,6 @@ class MyHandler(BaseHTTPRequestHandler):
     # Get Homepage
     def do_GET(self):
         # Check user is at home page
-        print(self.path)
         if self.path in public_files:   # make sure it's a valid file
             self.send_response(200)  # OK
             if (self.path == '/'):
@@ -62,28 +61,30 @@ class MyHandler(BaseHTTPRequestHandler):
 
             self.wfile.write(bytes(molecules_json, "utf-8"))
         elif (self.path == '/svg'):
-            print(MyHandler.present_molecule)
             if (MyHandler.present_molecule == "Empty"):
                 # database empty
                 self.send_response(204) # No Content
                 self.send_header("Content-type", "image/svg+xml")
                 self.end_headers()
                 return
+            
+            molecules = db.getMolecules()
         
             self.send_response( 200 ) # OK
             self.send_header("Content-type", "image/svg+xml") #Declare content type (image display)
             self.end_headers() #End declaration
-
+            
+            for mol in molecules:
+                # Check if the name of the current molecule matches the target name
+                if mol['name'] == MyHandler.present_molecule:
+                    acount = mol['atom_count']
+                    break
             length = int(self.headers.get('Content-Length', 0)) #Declare length of page
             # Get molecule and setup SVG
             MolDisplay.radius = db.radius()
             MolDisplay.element_name = db.element_name()
             MolDisplay.header += db.radial_gradients()
             mol = db.load_mol(MyHandler.present_molecule)
-            
-            print(MyHandler.angleX)
-            print(MyHandler.angleY)
-            print(MyHandler.angleZ)
             
             if (MyHandler.angleX != 0):
                 mx = molecule.mx_wrapper(int(MyHandler.angleX), 0, 0)
@@ -95,9 +96,39 @@ class MyHandler(BaseHTTPRequestHandler):
                 mx = molecule.mx_wrapper(0, 0, int(MyHandler.angleZ))
                 mol.xform( mx.xform_matrix )
             mol.sort()
+            
+            svg = mol.svg()
+            print(int(acount))
+            if (int(acount) < 5):
+                svg = svg.replace('<svg ', '<svg id="display-svg" version="1.1" viewBox="0 0 1000 1000" width="500px" height="400px" preserveAspectRatio="xMidYMid meet" ')
+                print("not scaled")
+            elif (5 < int(acount) and int(acount) < 15):
+                svg = svg.replace('<svg ', '<svg id="display-svg" version="1.1" viewBox="0 0 1000 1000" width="500px" height="400px" preserveAspectRatio="xMidYMid meet" style="transform: scale(0.9);" ')
+                print("scaled 1")
+            elif (15 < int(acount) and int(acount) < 30):
+                svg = svg.replace('<svg ', '<svg id="display-svg" version="1.1" viewBox="0 0 1000 1000" width="500px" height="400px" preserveAspectRatio="xMidYMid meet" style="transform: scale(0.7);" ')
+                print("scaled 2")
+            else:
+                svg = svg.replace('<svg ', '<svg id="display-svg" version="1.1" viewBox="0 0 1000 1000" width="500px" height="400px" preserveAspectRatio="xMidYMid meet" style="transform: scale(0.5);" ')
+                print("scaled 3")
 
-            self.wfile.write( bytes( mol.svg(), "utf-8" ) ) #Create Page
-
+            self.wfile.write( bytes(svg, "utf-8" ) ) #Create Page
+        elif self.path == '/background.jpg':
+            self.send_response(200)
+            self.send_header('Content-type', 'image/jpg')
+            with open('background.jpg', 'rb') as f:
+                img = f.read()
+            self.send_header('Content-length', len(img))
+            self.end_headers()
+            self.wfile.write(img)
+        elif self.path == '/hanken-grotesk.woff2':
+            self.send_response(200)
+            self.send_header('Content-type', 'font/woff2')
+            with open('hanken-grotesk.woff2', 'rb') as f:
+                font = f.read()
+            self.send_header('Content-length', len(font))
+            self.end_headers()
+            self.wfile.write(font)
         else:
             self.send_response(404)  # Notify 404 error
             self.end_headers()  # End declaration

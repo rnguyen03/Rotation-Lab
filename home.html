@@ -5,27 +5,30 @@
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<body>
-  <div class="nav-bar">
-    <a href="home.html">Home</a>
-    <a href="elements.html">Elements</a>
-    <a href="upload-sdf.html">Upload SDF</a>
-    <a href="molecules.html">Molecules</a>
-    <a href="viewer.html">Viewer</a>
-  </div>
-  <header>
-    <h1>Molecule Viewer</h1>
-  </header>
-  <div class="wrapper">
+<body id="landing-body">
+  <div class="landing-wrapper">
+    <div class="nav-bar">
+      <a href="home.html">Home</a>
+      <a href="elements.html">Elements</a>
+      <a href="upload-sdf.html">Upload SDF</a>
+      <a href="molecules.html">Molecules</a>
+      <a href="viewer.html">Viewer</a>
+    </div>
     <main>
-      <h2>Welcome to Molecule Viewer</h2>
-      <p>View and explore molecules in 3D with our interactive visualization tools.</p>
-      <a href="elements.html" class="btn">Get Started</a>
+      <div id="hero">
+        <h2 id="welcome"><b>Welcome to <br> Rotation Lab</b></h2>
+        <p id="instruct">View and explore molecules in 3D with our interactive visualization tools.
+          <br><br>Configure -> Select -> Rotate
+        </p>
+        <div class="btn" id="hero-btn">
+          <a href="elements.html">Get Started</a>
+        </div>
+      </div>
+      <div id="landing-footer">
+        <p>&copy; 2023 Rotation Lab</p>
+      </div>
     </main>
   </div>
 </body>
-<footer>
-  <p>&copy; 2023 Molecule Viewer</p>
-</footer>
 
 </html>

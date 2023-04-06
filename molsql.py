@@ -137,11 +137,24 @@ class Database:
 
         # Add all atoms in Molecule
         for atoms in range(molecule.atom_no):
-            self.add_atom(name, Atom(molecule.get_atom(atoms)))
-
+            atom = Atom(molecule.get_atom(atoms)) 
+            self.add_atom(name, atom)
+            self.handleDefault(atom)
+                
         # Add all bonds in Molecule
         for bonds in range(molecule.bond_no):
             self.add_bond(name, Bond(molecule.get_bond(bonds)))
+            
+    def handleDefault(self, atom):
+        element_code = atom.atom.element
+        c = self.conn.cursor()
+        # Check if element already exists
+        c.execute("SELECT * FROM Elements WHERE ELEMENT_CODE = ?", (element_code,))
+        row = c.fetchone()
+        if row is None:
+            # Insert new element
+            self.conn.execute(f"""INSERT INTO Elements  VALUES ('{1}', '{atom.atom.element}', '{atom.atom.element}', 'FFFFFF', '050505', '020202', '{45}');""")
+            self.conn.commit()
             
     # Create molecule object
     def load_mol( self, name ):

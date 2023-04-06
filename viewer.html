@@ -8,28 +8,33 @@
 </head>
 
 <body>
-    <div class="nav-bar">
-        <a href="home.html">Home</a>
-        <a href="elements.html">Elements</a>
-        <a href="upload-sdf.html">Upload SDF</a>    
-        <a href="molecules.html">Molecules</a>
-        <a href="viewer.html">Viewer</a>
-    </div>
-    <h1> Viewer </h1>
-    <div class="display-wrapper">
-        <div id="display-box">
+    <div class="wrapper">
+        <div class="nav-bar">
+            <a href="home.html">Home</a>
+            <a href="elements.html">Elements</a>
+            <a href="upload-sdf.html">Upload SDF</a>    
+            <a href="molecules.html">Molecules</a>
+            <a href="viewer.html">Viewer</a>
         </div>
-        <div id="control-pannel">
-            <div id="button-row">
-                <button id="rotate-x">Rotate X</button>
-                <button id="rotate-y">Rotate Y</button>
-                <button id="rotate-z">Rotate Z</button>
+        <div class="page-title">
+            <h1> Viewer </h1>
+        </div>
+        <div class="display-wrapper">
+            <div id="display-box">
+                <svg id="display-svg"></svg>
+            </div>
+            <div id="control-pannel">
+                <div id="button-row">
+                    <button class="control-btn" id="rotate-x">Rotate X</button>
+                    <button class="control-btn" id="rotate-y">Rotate Y</button>
+                    <button class="control-btn" id="rotate-z">Rotate Z</button>
+                </div>
             </div>
         </div>
     </div>
 </body>
 <footer>
-    <p>&copy; 2023 Molecule Viewer</p>
+    <p>&copy; 2023 Rotate Lab</p>
 </footer>
 
 </html>

@@ -38,7 +38,6 @@ $(document).ready(function() {
                     submission.append(repeating)
                 } else {
                     submission.append(invalid)
-                    alert("Error: " + error);
                 }
             }
         });

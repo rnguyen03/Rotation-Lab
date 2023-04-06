@@ -1,19 +1,19 @@
 $(document).ready(function () {
-    getSDF();
+    getSDF(0);
 
     $("#rotate-x").click(function() {
         requestRotation("x");
-        getSDF();
+        getSDF(1);
     });
     
     $("#rotate-y").click(function() {
         requestRotation("y");
-        getSDF();
+        getSDF(1);
     });
     
     $("#rotate-z").click(function() {
         requestRotation("z");
-        getSDF();
+        getSDF(1);
     });
 });
 
@@ -32,7 +32,7 @@ function requestRotation(axis) {
     });
 }
 
-function getSDF(){
+function getSDF(count, atoms) {
     $.ajax({
         url: "/svg",
         type: "GET",
@@ -48,10 +48,7 @@ function getSDF(){
                 });
                 displayBox.append(emptyBar);
             }
-            else {
-                data = data.replace('width="1000"', 'width="500"');
-                data = data.replace('height="1000"', 'height="400"');
-                data = data.replace('<svg ', '<svg version="1.1" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet" ');
+            else {                
                 displayBox.append(data);
             }
         },
