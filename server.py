@@ -217,7 +217,8 @@ class MyHandler(BaseHTTPRequestHandler):
 
             # Add molecule into database
             try:
-                self.db.add_molecule(mol_name, file)
+                db.add_molecule(mol_name, file)
+                print("try")
             except:
                 # Handle invalid SDF file error
                 response_body = "Invalid SDF file"
@@ -227,16 +228,19 @@ class MyHandler(BaseHTTPRequestHandler):
                 self.send_header("Content-length", response_length)
                 self.end_headers()
                 self.wfile.write(response_body.encode('utf-8'))
+                print("HUH?")
                 return
+            else:
+                response_body = "STORED"
+                print("looks good to me")
+                # Send response to client
+                response_length = len(response_body.encode('utf-8'))
+                self.send_response(200)
+                self.send_header("Content-type", "text/plain")
+                self.send_header("Content-length", response_length)
+                self.end_headers()
+                self.wfile.write(response_body.encode('utf-8'))
 
-            # Send response to client
-            response_body = "STORED"
-            response_length = len(response_body.encode('utf-8'))
-            self.send_response(200)
-            self.send_header("Content-type", "text/plain")
-            self.send_header("Content-length", response_length)
-            self.end_headers()
-            self.wfile.write(response_body.encode('utf-8'))
         elif (self.path == "/view-molecule"):
             content_length = int(self.headers['Content-Length'])
             body = self.rfile.read(content_length)
@@ -300,41 +304,3 @@ class MyHandler(BaseHTTPRequestHandler):
 # Server Start
 httpd = HTTPServer(('localhost', int(sys.argv[1])), MyHandler)
 httpd.serve_forever()
-
-
-# home_form = """
-# <html>
-#     <head>
-#         <title> File Upload </title>
-#     </head>
-#     <body>
-#         <h1> File Upload </h1>
-#             <form action="molecule" enctype="multipart/form-data" method="post">
-#             <p>
-#                 <input type="file" id="sdf_file" name="filename"/>
-#             </p>
-#             <p>
-#                 <input type="submit" value="Upload"/>
-#             </p>
-#         </form>
-#     </body>
-# </html>
-# """
-
-# Connect to Server
-
-# Validate the SDF file
-# try:
-#     mols = Chem.SDMolSupplier(io.BytesIO(sdf_file))
-#     if mols is None or len(mols) == 0:
-#         raise ValueError('Invalid SDF file')
-# except:
-#     # Handle invalid SDF file error
-#     response_body = "Invalid SDF file"
-#     response_length = len(response_body.encode('utf-8'))
-#     self.send_response(400)
-#     self.send_header("Content-type", "text/plain")
-#     self.send_header("Content-length", response_length)
-#     self.end_headers()
-#     self.wfile.write(response_body.encode('utf-8'))
-#     return
