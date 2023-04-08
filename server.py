@@ -218,7 +218,6 @@ class MyHandler(BaseHTTPRequestHandler):
             # Add molecule into database
             try:
                 db.add_molecule(mol_name, file)
-                print("try")
             except:
                 # Handle invalid SDF file error
                 response_body = "Invalid SDF file"
@@ -228,7 +227,6 @@ class MyHandler(BaseHTTPRequestHandler):
                 self.send_header("Content-length", response_length)
                 self.end_headers()
                 self.wfile.write(response_body.encode('utf-8'))
-                print("HUH?")
                 return
             else:
                 response_body = "STORED"
