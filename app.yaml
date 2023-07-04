@@ -1,0 +1,53 @@
+runtime: python39
+
+handlers:
+- url: /elements.html
+  static_files: elements.html
+  upload: elements.html
+
+- url: /upload-sdf.html
+  static_files: upload-sdf.html
+  upload: upload-sdf.html
+
+- url: /molecules.html
+  static_files: molecules.html
+  upload: molecules.html
+
+- url: /home.html
+  static_files: home.html
+  upload: home.html
+
+- url: /viewer.html
+  static_files: viewer.html
+  upload: viewer.html
+
+- url: /style.css
+  static_files: style.css
+  upload: style.css
+
+- url: /elements.js
+  static_files: elements.js
+  upload: elements.js
+
+- url: /uploadsdf.js
+  static_files: uploadsdf.js
+  upload: uploadsdf.js
+
+- url: /molecules.js
+  static_files: molecules.js
+  upload: molecules.js
+
+- url: /viewer.js
+  static_files: viewer.js
+  upload: viewer.js
+
+- url: /background.jpg
+  static_files: background.jpg
+  upload: background.jpg
+
+- url: /hanken-grotesk.woff2
+  static_files: hanken-grotesk.woff2
+  upload: hanken-grotesk.woff2
+
+- url: /.*
+  script: auto
